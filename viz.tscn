@@ -1,0 +1,93 @@
+[gd_scene format=3 uid="uid://wx6w1sa1qiue"]
+
+[ext_resource type="Script" uid="uid://ufnvcqp106j5" path="res://loop.gd" id="1_sa02n"]
+[ext_resource type="FontFile" uid="uid://c7moh0ph6qpen" path="res://font_roboto_black.ttf" id="3_6st14"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_eyth3"]
+font = ExtResource("3_6st14")
+font_size = 64
+outline_size = 28
+outline_color = Color(0, 0, 0, 1)
+shadow_offset = Vector2(12.95, 9.15)
+
+[sub_resource type="Animation" id="Animation_eyth3"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Label:scale")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(1, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_6st14"]
+resource_name = "pulse"
+loop_mode = 1
+step = 0.1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Label:scale")
+tracks/0/interp = 2
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.19999999),
+"transitions": PackedFloat32Array(0.5, 1),
+"update": 0,
+"values": [Vector2(1, 1), Vector2(1.05, 1.05)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_be0ck"]
+_data = {
+&"RESET": SubResource("Animation_eyth3"),
+&"pulse": SubResource("Animation_6st14")
+}
+
+[node name="LyricsViz" type="Control" unique_id=1084521862]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_sa02n")
+
+[node name="AudioVoice1" type="AudioStreamPlayer" parent="." unique_id=626735806]
+max_polyphony = 3
+bus = &"voice"
+
+[node name="AudioVoice2" type="AudioStreamPlayer" parent="." unique_id=1116098845]
+max_polyphony = 3
+bus = &"voice"
+
+[node name="AudioBackground" type="AudioStreamPlayer" parent="." unique_id=2127920641]
+volume_db = -3.1
+bus = &"background"
+
+[node name="Timer" type="Timer" parent="." unique_id=1857302970]
+wait_time = 3.1999999999999997
+one_shot = true
+
+[node name="Label" type="Label" parent="." unique_id=1992178471]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+pivot_offset_ratio = Vector2(0.5, 0.5)
+label_settings = SubResource("LabelSettings_eyth3")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=1561474055]
+libraries/ = SubResource("AnimationLibrary_be0ck")
+autoplay = &"pulse"
+speed_scale = 2.5
+
+[connection signal="timeout" from="Timer" to="." method="_on_timer_verse_timeout"]
